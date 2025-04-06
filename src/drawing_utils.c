@@ -1,4 +1,5 @@
 #include <gtk/gtk.h>
+#include <math.h>
 #include "../include/drawing_utils.h"
 #include <gtk-4.0/gtk/gtknative.h>
 #include <gtk-4.0/gtk/gtkwidget.h>
@@ -8,6 +9,7 @@ double start_x = 0.0, start_y = 0.0;
 double line_start_x, line_start_y;
 double line_middle_x, line_middle_y;
 double line_width = 1.0;
+double velocity;
 
 //manages window resizing - happens at the start of the application
 void resize_callback (GtkWidget *widget, int width, int height, gpointer data) {
@@ -49,12 +51,13 @@ void draw_brush (GtkWidget *widget, double x, double y) {
 
 	cairo_move_to (drawing_surface, line_start_x, line_start_y);
 	//cairo_line_to (drawing_surface, x, y);
-	cairo_set_line_width (drawing_surface, line_width);
+	cairo_set_line_width (drawing_surface, line_width + velocity * 0.2);
 	cairo_curve_to (drawing_surface, line_start_x, line_start_y, line_middle_x, line_middle_y, x, y);
 	cairo_stroke (drawing_surface);
 
 	//reset line position
-
+	velocity = sqrt (pow ((x - line_start_x), 2) + pow ((y - line_start_y), 2));
+	g_print ("%f\n", velocity);
     
 	line_start_x = line_middle_x;
 	line_start_y = line_middle_y;
@@ -77,6 +80,7 @@ void drag_begin (GtkGestureDrag *gesture, double x, double y, GtkWidget *area) {
     line_middle_y = y;
 	line_start_x = x;
 	line_start_y = y;
+	velocity = 0;
 	draw_brush (area, x, y);
 } 
 

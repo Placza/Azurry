@@ -4,6 +4,7 @@
 #include <gtk/gtk.h>
 
 extern double line_width;
+extern double velicoty;
 extern cairo_surface_t *surface;
 extern double start_x;
 extern double start_y;

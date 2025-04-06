@@ -3,8 +3,32 @@
 
 cairo_surface_t *surface = NULL;
 double start_x = 0.0, start_y = 0.0;
-double line_start_x = 0.0, line_start_y = 0.0;
-double line_width = 1.0;
+double line_start_x, line_start_y;
+double line_middle_x, line_middle_y;
+double line_width = 15.0;
+
+//manages window resizing - happens at the start of the application
+void resize_callback (GtkWidget *widget, int width, int height, gpointer data) {
+	//if a surface exists, destroy it
+	if (surface) {
+		cairo_surface_destroy (surface);
+		surface = NULL;
+	}
+	//if a surface doesn't exist, then create a new one
+	if (gtk_native_get_surface (gtk_widget_get_native (widget))) {
+		surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+											  gtk_widget_get_width (widget), 
+											  gtk_widget_get_height (widget));
+		
+		//create a new cairo object and color it white
+		cairo_t *cairo;
+		cairo = cairo_create (surface);
+
+		cairo_set_source_rgb (cairo, 255, 255, 255);
+		cairo_paint (cairo);
+		cairo_destroy (cairo); 
+	}
+}
 
 void draw_callback (GtkDrawingArea *area, cairo_t *cairo, int width, int height, gpointer data) {
 	/*
@@ -24,12 +48,17 @@ void draw_brush (GtkWidget *widget, double x, double y) {
 	cairo_move_to (drawing_surface, line_start_x, line_start_y);
 	//cairo_line_to (drawing_surface, x, y);
 	cairo_set_line_width (drawing_surface, line_width);
-	cairo_curve_to (drawing_surface, line_start_x, line_start_y, (line_start_x + x) / 2, (line_start_y + y) / 2, x, y);
+	cairo_curve_to (drawing_surface, line_start_x, line_start_y, line_middle_x, line_middle_y, x, y);
 	cairo_stroke (drawing_surface);
 
 	//reset line position
-	line_start_x = x;
-	line_start_y = y;
+
+    
+	line_start_x = line_middle_x;
+	line_start_y = line_middle_y;
+    
+    line_middle_x = x;
+    line_middle_y = y;
 
 	cairo_move_to (drawing_surface, x, y);
 
@@ -42,6 +71,8 @@ void draw_brush (GtkWidget *widget, double x, double y) {
 void drag_begin (GtkGestureDrag *gesture, double x, double y, GtkWidget *area) {
 	start_x = x;
 	start_y = y;
+    line_middle_x = x;
+    line_middle_y = y;
 	line_start_x = x;
 	line_start_y = y;
 	draw_brush (area, x, y);

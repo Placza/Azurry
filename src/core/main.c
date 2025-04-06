@@ -2,29 +2,6 @@
 #include "drawing_utils.h"
 #define APPLICATION_ID "com.github.Placza.Azurry"
 
-//manages window resizing - happens at the start of the application
-static void resize_callback (GtkWidget *widget, int width, int height, gpointer data) {
-	//if a surface exists, destroy it
-	if (surface) {
-		cairo_surface_destroy (surface);
-		surface = NULL;
-	}
-	//if a surface doesn't exist, then create a new one
-	if (gtk_native_get_surface (gtk_widget_get_native (widget))) {
-		surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-											  gtk_widget_get_width (widget), 
-											  gtk_widget_get_height (widget));
-		
-		//create a new cairo object and color it white
-		cairo_t *cairo;
-		cairo = cairo_create (surface);
-
-		cairo_set_source_rgb (cairo, 255, 255, 255);
-		cairo_paint (cairo);
-		cairo_destroy (cairo); 
-	}
-}
-
 static void app_activate (GApplication *app, gpointer *user_data) {
 	/*
 	* GObject -- GApplication -- GtkApplication

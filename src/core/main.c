@@ -1,12 +1,6 @@
 #include <gtk/gtk.h>
+#include "drawing_utils.h"
 #define APPLICATION_ID "com.github.Placza.Azurry"
-
-//A surface to store current drawings
-static cairo_surface_t *surface = NULL;
-static double start_x;
-static double start_y;
-static double line_start_x;
-static double line_start_y;
 
 //manages window resizing - happens at the start of the application
 static void resize_callback (GtkWidget *widget, int width, int height, gpointer data) {
@@ -29,57 +23,6 @@ static void resize_callback (GtkWidget *widget, int width, int height, gpointer 
 		cairo_paint (cairo);
 		cairo_destroy (cairo); 
 	}
-}
-
-static void draw_callback (GtkDrawingArea *area, cairo_t *cairo, int width, int height, gpointer data) {
-	/*
-	* Sets the public surface variable as the main surface to draw on in the
-	* Gtk drawing area
-	*/
-	cairo_set_source_surface (cairo, surface, 0, 0);
-	cairo_paint (cairo);
-}
-
-//defines how drawing on the surface should work
-//currently the standard way is to draw lines when the mouse is moving
-static void draw_brush (GtkWidget *widget, double x, double y) {
-	cairo_t *drawing_surface;
-	drawing_surface = cairo_create (surface);
-
-	cairo_move_to (drawing_surface, line_start_x, line_start_y);
-	//cairo_line_to (drawing_surface, x, y);
-	cairo_set_line_width (drawing_surface, 30.0);
-	cairo_curve_to (drawing_surface, line_start_x, line_start_y, (line_start_x + x) / 2, (line_start_y + y) / 2, x, y);
-	cairo_stroke (drawing_surface);
-
-	//reset line position
-	line_start_x = x;
-	line_start_y = y;
-
-	cairo_move_to (drawing_surface, x, y);
-
-	cairo_destroy (drawing_surface);
-
-	gtk_widget_queue_draw (widget);
-}
-
-//function for handling begining of a draging motion
-static void drag_begin (GtkGestureDrag *gesture, double x, double y, GtkWidget *area) {
-	start_x = x;
-	start_y = y;
-	line_start_x = x;
-	line_start_y = y;
-	draw_brush (area, x, y);
-} 
-
-//handles the ongoing draging motion
-static void drag_update (GtkGestureDrag *gesture, double x, double y, GtkWidget *area) {
-	draw_brush (area, start_x + x, start_y + y);
-}
-
-//handles when the draging has stopped
-static void drag_end (GtkGestureDrag *gesture, double x, double y, GtkWidget *area) {
-	draw_brush (area, start_x + x, start_y + y);
 }
 
 static void app_activate (GApplication *app, gpointer *user_data) {

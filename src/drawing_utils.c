@@ -1,11 +1,13 @@
 #include <gtk/gtk.h>
-#include "drawing_utils.h"
+#include "../include/drawing_utils.h"
+#include <gtk-4.0/gtk/gtknative.h>
+#include <gtk-4.0/gtk/gtkwidget.h>
 
 cairo_surface_t *surface = NULL;
 double start_x = 0.0, start_y = 0.0;
 double line_start_x, line_start_y;
 double line_middle_x, line_middle_y;
-double line_width = 15.0;
+double line_width = 1.0;
 
 //manages window resizing - happens at the start of the application
 void resize_callback (GtkWidget *widget, int width, int height, gpointer data) {

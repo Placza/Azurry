@@ -1,5 +1,5 @@
 #include <gtk/gtk.h>
-#include "drawing_utils.h"
+#include "../include/drawing_utils.h"
 #define APPLICATION_ID "com.github.Placza.Azurry"
 
 static void app_activate (GApplication *app, gpointer *user_data) {

@@ -47,7 +47,9 @@ static void draw_brush (GtkWidget *widget, double x, double y) {
 	drawing_surface = cairo_create (surface);
 
 	cairo_move_to (drawing_surface, line_start_x, line_start_y);
-	cairo_line_to (drawing_surface, x, y);
+	//cairo_line_to (drawing_surface, x, y);
+	cairo_set_line_width (drawing_surface, 30.0);
+	cairo_curve_to (drawing_surface, line_start_x, line_start_y, (line_start_x + x) / 2, (line_start_y + y) / 2, x, y);
 	cairo_stroke (drawing_surface);
 
 	//reset line position

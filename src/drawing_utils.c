@@ -57,7 +57,6 @@ void draw_brush (GtkWidget *widget, double x, double y) {
 
 	//reset line position
 	velocity = sqrt (pow ((x - line_start_x), 2) + pow ((y - line_start_y), 2));
-	g_print ("%f\n", velocity);
     
 	line_start_x = line_middle_x;
 	line_start_y = line_middle_y;

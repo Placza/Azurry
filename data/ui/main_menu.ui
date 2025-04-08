@@ -12,21 +12,21 @@
                 <object class="GtkBox">
                     <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
                     <child>
-                        <object class="GtkButton">
+                        <object class="GtkButton" id="brush_tool">
                             <property name="label">Brush</property>
                             <property name="hexpand">true</property>
                             <property name="vexpand">true</property>
                         </object>
                     </child>
                     <child>
-                        <object class="GtkButton">
+                        <object class="GtkButton" id="eraser_tool">
                             <property name="label">Eraser</property>
                             <property name="hexpand">true</property>
                             <property name="vexpand">true</property>
                         </object>
                     </child>
                     <child>
-                        <object class="GtkButton">
+                        <object class="GtkButton" id="clear_tool">
                             <property name="label">Clear</property>
                             <property name="hexpand">true</property>
                             <property name="vexpand">true</property>

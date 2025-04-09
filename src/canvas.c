@@ -65,8 +65,6 @@ void canvas_draw_brush (GtkWidget *widget, double x, double y) {
     line_middle_x = x;
     line_middle_y = y;
 
-	cairo_move_to (drawing_surface, x, y);
-
 	cairo_destroy (drawing_surface);
 
 	gtk_widget_queue_draw (widget);

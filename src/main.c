@@ -1,5 +1,7 @@
 #include <gtk/gtk.h>
 #include "../include/canvas.h"
+#include "../include/azurry_canvas.h"
+#include "../include/azurry_tools.h"
 #define APPLICATION_ID "com.github.Placza.Azurry"
 
 static void app_activate (GApplication *app, gpointer *user_data) {
@@ -8,7 +10,28 @@ static void app_activate (GApplication *app, gpointer *user_data) {
 	* <---parent                      child--->
 	*/
 
-	GtkBuilder *build;
+	GtkWidget *win;
+	GtkWidget *drawing_area;
+
+	win = gtk_application_window_new (GTK_APPLICATION (app));
+	gtk_window_set_default_size (GTK_WINDOW (win), 1000, 800);
+	gtk_window_present (GTK_WINDOW (win));
+
+	drawing_area = gtk_drawing_area_new ();
+
+	Azurry_canvas *canvas = azurry_canvas_create (drawing_area);
+
+	Azurry_tool *tool = azurry_tool_create ();
+
+	Azurry_pointer_tool *pointer_tool = azurry_pointer_tool_create (tool, 100);
+
+	azurry_pointer_tool_use (pointer_tool);
+
+	azurry_tool_use (tool, pointer_tool, canvas->surface, 0, 0);
+
+	gtk_window_set_child (GTK_WINDOW (win), drawing_area);
+
+	/*GtkBuilder *build;
 	GtkWidget *win;
 	GtkWidget *drawing_area;
 	GtkWidget *brush_button;
@@ -46,7 +69,7 @@ static void app_activate (GApplication *app, gpointer *user_data) {
 
 
 	//draws the window
-	gtk_window_present (GTK_WINDOW (win));
+	gtk_window_present (GTK_WINDOW (win));*/
 }
 
 int main(int argc, char **argv) {

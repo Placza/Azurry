@@ -1,9 +1,9 @@
 #include <gtk/gtk.h>
 #include "../include/azurry_tools.h"
 
-static void azurry_pointer_tool_apply (void *self, cairo_surface_t *surface, int x, int y);
+static void azurry_pointer_tool_apply (void *self, cairo_surface_t *surface, double x, double y);
 
-static void azurry_brush_tool_apply (void *self, cairo_surface_t *surface, int x, int y);
+static void azurry_brush_tool_apply (void *self, cairo_surface_t *surface, double x, double y);
 
 /*constructor for the tool class*/
 Azurry_tool* azurry_tool_create () {
@@ -17,15 +17,14 @@ Azurry_tool* azurry_tool_create () {
   function to call when we want to use a tool
   after we pick a tool, we can apply it directly ba calling this function
 */
-void azurry_tool_use (Azurry_tool *self, cairo_surface_t *surface, int x, int y) {
+void azurry_tool_use (Azurry_tool *self, cairo_surface_t *surface, double x, double y) {
     if (self->apply != NULL)
         self->apply(self->child, surface, x, y);
-    g_printerr ("Specific tool function not defined.");
+    else g_printerr ("Specific tool function not defined.");
 }
 
 void azurry_tool_destroy (Azurry_tool *tool) {
     free (tool->child);
-    free (tool->apply);
     free (tool);
 }
 
@@ -49,7 +48,7 @@ void azurry_pointer_tool_use (Azurry_pointer_tool *self) {
 }
 
 /*pointer tool's usage function - what to perfomr when active*/
-static void azurry_pointer_tool_apply (void *self, cairo_surface_t *surface, int x, int y) {
+static void azurry_pointer_tool_apply (void *self, cairo_surface_t *surface, double x, double y) {
     Azurry_pointer_tool *pointer_tool = (Azurry_pointer_tool*) self;
     g_print ("Using pointer %d\n", pointer_tool->size);
 }
@@ -73,14 +72,13 @@ void azurry_brush_tool_use (Azurry_brush_tool *self) {
     self->parent->apply = azurry_brush_tool_apply;
 }
 
-static void azurry_brush_tool_apply (void *self, cairo_surface_t *surface, int x, int y) {
+static void azurry_brush_tool_apply (void *self, cairo_surface_t *surface, double x, double y) {
     Azurry_brush_tool *brush_tool = (Azurry_brush_tool*) self;
 
     cairo_t *cairo = cairo_create (surface);
     cairo_set_source_rgb (cairo, brush_tool->r, brush_tool->g, brush_tool->g);
-    cairo_set_line_width (cairo, brush_tool->size);
-    cairo_rectangle (cairo, 100.0, 100.0, 300.0, 300.0);
-    cairo_stroke (cairo);
+    cairo_rectangle (cairo, x, y, brush_tool->size, brush_tool->size);
+    cairo_fill (cairo);
 
     cairo_destroy (cairo);
 }

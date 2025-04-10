@@ -2,6 +2,7 @@
 #include "../include/canvas.h"
 #include "../include/azurry_canvas.h"
 #include "../include/azurry_tools.h"
+#include "../include/azurry_listener.h"
 #define APPLICATION_ID "com.github.Placza.Azurry"
 
 static void app_activate (GApplication *app, gpointer *user_data) {
@@ -21,15 +22,15 @@ static void app_activate (GApplication *app, gpointer *user_data) {
 
 	Azurry_tool *tool = azurry_tool_create ();
 
-	Azurry_brush_tool *brush_tool_1 = azurry_brush_tool_create (tool, 10.0, 255, 0, 0);
+	Azurry_brush_tool *brush_tool = azurry_brush_tool_create (tool, 10.0, 0, 0, 0);
 
-	Azurry_brush_tool *brush_tool_2 = azurry_brush_tool_create (tool, 4.0, 0, 255, 0);
+	azurry_brush_tool_use (brush_tool);
 
 	Azurry_canvas *canvas = azurry_canvas_create (drawing_area, tool);
 
-	azurry_brush_tool_use (brush_tool_1);
+	Azurry_listener *listener = azurry_listener_create (canvas, tool);
 
-	azurry_brush_tool_use (brush_tool_2);
+	Azurry_drag_listener *drag_listener = azurry_drag_listener_create (listener);
 
 	gtk_window_set_child (GTK_WINDOW (win), drawing_area);
 

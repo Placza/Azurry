@@ -21,8 +21,6 @@ Azurry_canvas* azurry_canvas_create (GtkWidget *drawing_area, Azurry_tool *tool)
 */
 void azurry_canvas_draw_callback (GtkDrawingArea *area, cairo_t *cairo, int width, int height, gpointer data) {
     Azurry_canvas *canvas = (Azurry_canvas*) data;
-    
-    canvas->tool->apply(canvas->tool->child, canvas->surface, 0, 0);
 
     cairo_set_source_surface (cairo, canvas->surface, 0, 0);
     cairo_paint (cairo);
@@ -39,9 +37,7 @@ void azurry_canvas_resize_callback (GtkWidget *widget, int width, int height, gp
 	}
     //if a sruface doesn't exist, create a new one
 	if (gtk_native_get_surface (gtk_widget_get_native (widget))) {
-		canvas->surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-											  gtk_widget_get_width (widget), 
-											  gtk_widget_get_height (widget));
+		canvas->surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, gtk_widget_get_width (widget), gtk_widget_get_height (widget));
         cairo_t *cairo;
 		cairo = cairo_create (canvas->surface);
         
@@ -56,9 +52,7 @@ void azurry_canvas_realize_callback (GtkWidget *widget, gpointer data) {
     Azurry_canvas *canvas = (Azurry_canvas*) data;
 
     if (!canvas->surface) {
-        canvas->surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                                      gtk_widget_get_width (widget), 
-                                                      gtk_widget_get_height (widget));
+        canvas->surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, gtk_widget_get_width (widget), gtk_widget_get_height (widget));
         cairo_t *cairo;
         cairo = cairo_create (canvas->surface);
 

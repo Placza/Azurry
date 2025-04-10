@@ -5,7 +5,7 @@
 
 typedef struct {
     void *child;
-    void (*apply) (void *child, cairo_surface_t *surface, int x, int y);
+    void (*apply) (void *child, cairo_surface_t *surface, double x, double y);
 } Azurry_tool;
 
 typedef struct {
@@ -27,7 +27,7 @@ typedef struct {
 /*Azurry  tool*/
 Azurry_tool* azurry_tool_create ();
 
-void azurry_tool_use (Azurry_tool *self, cairo_surface_t *surface, int x, int y);
+void azurry_tool_use (Azurry_tool *self, cairo_surface_t *surface, double x, double y);
 
 void azurry_tool_destroy (Azurry_tool *tool);
 

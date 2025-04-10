@@ -49,3 +49,9 @@ void azurry_canvas_resize_callback (GtkWidget *widget, int width, int height, gp
 		cairo_destroy (cairo); 
 	}
 }
+
+void azurry_canvas_destroy (Azurry_canvas *canvas) {
+    free (canvas->drawing_area);
+    free (canvas->surface);
+    free (canvas);
+}

@@ -2,8 +2,9 @@
 #include "../include/azurry_canvas.h"
 
 /*initializes the canvas*/
-Azurry_canvas* azurry_canvas_create (GtkWidget *drawing_area) {
+Azurry_canvas* azurry_canvas_create (GtkWidget *drawing_area, Azurry_tool *tool) {
     Azurry_canvas *canvas = (Azurry_canvas*) g_malloc (sizeof (Azurry_canvas));
+    canvas->tool = tool;
     canvas->drawing_area = drawing_area;
     canvas->surface = NULL;
     canvas->current_tool = 0;
@@ -20,8 +21,9 @@ Azurry_canvas* azurry_canvas_create (GtkWidget *drawing_area) {
 */
 void azurry_canvas_draw_callback (GtkDrawingArea *area, cairo_t *cairo, int width, int height, gpointer data) {
     Azurry_canvas *canvas = (Azurry_canvas*) data;
-    g_print ("%p\n", canvas->surface);
     
+    canvas->tool->apply(canvas->tool->child, canvas->surface, 0, 0);
+
     cairo_set_source_surface (cairo, canvas->surface, 0, 0);
     cairo_paint (cairo);
 }

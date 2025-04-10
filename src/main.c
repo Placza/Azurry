@@ -19,19 +19,17 @@ static void app_activate (GApplication *app, gpointer *user_data) {
 
 	drawing_area = gtk_drawing_area_new ();
 
-	Azurry_canvas *canvas = azurry_canvas_create (drawing_area);
+	Azurry_tool *tool = azurry_tool_create ();
 
-	g_print ("main %p\n", canvas->surface);
+	Azurry_brush_tool *brush_tool_1 = azurry_brush_tool_create (tool, 10.0, 255, 0, 0);
 
-	Azurry_tool *tool = azurry_tool_create (canvas);
+	Azurry_brush_tool *brush_tool_2 = azurry_brush_tool_create (tool, 4.0, 0, 255, 0);
 
-	Azurry_pointer_tool *pointer_tool = azurry_pointer_tool_create (tool, 20);
+	Azurry_canvas *canvas = azurry_canvas_create (drawing_area, tool);
 
-	Azurry_brush_tool *brush_tool = azurry_brush_tool_create (tool, 10.0, 0, 0, 0);
+	azurry_brush_tool_use (brush_tool_1);
 
-	azurry_brush_tool_use (brush_tool);
-
-	azurry_tool_use (tool, 0, 0);
+	azurry_brush_tool_use (brush_tool_2);
 
 	gtk_window_set_child (GTK_WINDOW (win), drawing_area);
 

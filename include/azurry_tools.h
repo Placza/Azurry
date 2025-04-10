@@ -2,17 +2,15 @@
 #define AZURRY_TOOLS_H
 
 #include <gtk/gtk.h>
-#include "azurry_canvas.h"
 
 typedef struct {
-    Azurry_canvas *canvas;
     void *child;
-    void (*apply) (void *child, int x, int y);
+    void (*apply) (void *child, cairo_surface_t *surface, int x, int y);
 } Azurry_tool;
 
 typedef struct {
-    int size;
     Azurry_tool *parent;
+    int size;
 } Azurry_pointer_tool;
 
 typedef struct {
@@ -27,9 +25,9 @@ typedef struct {
 } Azurry_eraser_tool;
 
 /*Azurry  tool*/
-Azurry_tool* azurry_tool_create (Azurry_canvas *canvas);
+Azurry_tool* azurry_tool_create ();
 
-void azurry_tool_use (Azurry_tool *self, int x, int y);
+void azurry_tool_use (Azurry_tool *self, cairo_surface_t *surface, int x, int y);
 
 void azurry_tool_destroy (Azurry_tool *tool);
 

@@ -15,6 +15,8 @@ void azurry_canvas_draw_callback (GtkDrawingArea *area, cairo_t *cairo, int widt
 
 void azurry_canvas_resize_callback (GtkWidget *widget, int width, int height, gpointer data);
 
+void azurry_canvas_realize_callback (GtkWidget *widget, gpointer data);
+
 void azurry_canvas_destroy (Azurry_canvas *canvas);
 
 #endif

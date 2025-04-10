@@ -21,6 +21,8 @@ static void app_activate (GApplication *app, gpointer *user_data) {
 
 	Azurry_canvas *canvas = azurry_canvas_create (drawing_area);
 
+	g_print ("main %p\n", canvas->surface);
+
 	Azurry_tool *tool = azurry_tool_create (canvas);
 
 	Azurry_pointer_tool *pointer_tool = azurry_pointer_tool_create (tool, 20);

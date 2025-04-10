@@ -23,7 +23,6 @@ void azurry_tool_use (Azurry_tool *self, int x, int y) {
 }
 
 void azurry_tool_destroy (Azurry_tool *tool) {
-    free (tool->canvas);
     free (tool->child);
     free (tool->apply);
     free (tool);
@@ -79,7 +78,7 @@ void azurry_brush_tool_use (Azurry_brush_tool *self) {
 static void azurry_brush_tool_apply (void *self, int x, int y) {
     Azurry_brush_tool *brush_tool = (Azurry_brush_tool*) self;
 
-    g_print ("%f\n", brush_tool->size);
+    g_print ("%p\n", brush_tool->parent->canvas->surface);
 
     cairo_t *cairo = cairo_create (brush_tool->parent->canvas->surface);
     cairo_set_source_rgb (cairo, brush_tool->r, brush_tool->g, brush_tool->b);

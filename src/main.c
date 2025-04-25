@@ -32,6 +32,10 @@ static void app_activate (GApplication *app, gpointer *user_data) {
 
 	Azurry_drag_listener *drag_listener = azurry_drag_listener_create (listener);
 
+	azurry_drag_listener_use (drag_listener);
+
+	azurry_listener_use(listener);
+
 	gtk_window_set_child (GTK_WINDOW (win), drawing_area);
 
 	/*GtkBuilder *build;

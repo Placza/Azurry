@@ -7,7 +7,7 @@
 
 typedef struct {
     void *child;
-    void (*on_event) ();
+    void (*apply) (void *child);
     Azurry_canvas *canvas;
     Azurry_tool *tool;
 } Azurry_listener;
@@ -18,13 +18,17 @@ typedef struct {
     double start_x, start_y;
 } Azurry_drag_listener;
 
+/*Azurry listener*/
 Azurry_listener *azurry_listener_create (Azurry_canvas *canvas, Azurry_tool *tool);
 
-void azurry_listener_trigger (Azurry_listener *self);
+void azurry_listener_use(Azurry_listener *self);
 
 void azurry_listener_destroy (Azurry_listener *listener);
 
+/*Azurry drag listener*/
 Azurry_drag_listener *azurry_drag_listener_create (Azurry_listener *parent);
+
+void azurry_drag_listener_use (Azurry_drag_listener *self);
 
 void azurry_drag_listener_drag_begin (GtkGestureDrag *gesture, double x, double y, gpointer data);
 

@@ -1,9 +1,35 @@
 #include <gtk/gtk.h>
 #include "../include/azurry_tools.h"
 
+/*
+  The Azurry_tool class is a placeholder for the current tool that is being used.
+  The Azurry_tool class contains a void *child field that represents the current tool.
+  The idea is that, for every new tool switch, we only have to call a simple tool_use() function that triggers
+  the functionality of the curent tool. Meaning, we can we have mutliple tool types constructed
+  (brush tool, drag tool, eraser tool...) and if we want to switch from one to the other, we can use the
+  Azurry_tool object that contains an instance of the currently used tool such that we call the azurry_tool_use
+  method to use the current tool's functionality.
+
+  How this pattern is applied:
+  1) We create the Azurry_tool object alongside all the other objects. For all the other tool classes,
+     we pass the Azurry_tool object as its parent.
+  2) We call the azurry_<tool_type>_tool_use() method of the other tool classes to switch between tools.
+     This makes it so the Azurry_tool object's child is the class that called that method.
+  
+  The inner structure of the pattern:
+  - azurry_<tool_type>_tool_apply(): defines the functionalities of all the different tools
+  - azurry_<tool_type>_tool_use(): sets the Azurry_tool object's child as the object that called that method
+  - azurry_tool_use(): applies the Azurry_tool object's child's apply method
+  - Azurry_tool class has the void (*appy) field that is the placeholder for its child's apply method
+*/
+
 static void azurry_pointer_tool_apply (void *self, cairo_surface_t *surface, double x, double y);
 
 static void azurry_brush_tool_apply (void *self, cairo_surface_t *surface, double x, double y);
+
+/*
+------------------------------------------------TOOL-------------------------------------------------------------------
+*/
 
 /*constructor for the tool class*/
 Azurry_tool* azurry_tool_create () {
@@ -27,6 +53,10 @@ void azurry_tool_destroy (Azurry_tool *tool) {
     free (tool->child);
     free (tool);
 }
+
+/*
+  ------------------------------------------------POINTER TOOL--------------------------------------------------------
+*/
 
 /*constructor for the pointer tool class*/
 Azurry_pointer_tool *azurry_pointer_tool_create (Azurry_tool *parent, int size) {
@@ -56,6 +86,10 @@ static void azurry_pointer_tool_apply (void *self, cairo_surface_t *surface, dou
 void azurry_pointer_tool_destroy (Azurry_pointer_tool *pointer_tool) {
     free (pointer_tool);
 }
+
+/*
+---------------------------------------------BRUSH TOOL------------------------------------------------------------------
+*/
 
 Azurry_brush_tool *azurry_brush_tool_create (Azurry_tool *parent, double size, int r, int g, int b) {
     Azurry_brush_tool *brush_tool = (Azurry_brush_tool*) malloc (sizeof (Azurry_brush_tool));
